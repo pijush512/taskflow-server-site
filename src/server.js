@@ -62,4 +62,4 @@ migrate().then(() => {
   process.exit(1)
 })
 
-module.exports = app // exported for tests
+module.exports = app
