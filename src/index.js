@@ -115,6 +115,8 @@ app.use((err, req, res, next) => {
 // ─── Start ───────────────────────────────────────────────────────
 
 // 🌟 ২. Vercel Serverless-এর জন্য মাইগ্রেশন হ্যান্ডলিং ফিক্স
+// ─── Start ───────────────────────────────────────────────────────
+
 if (process.env.NODE_ENV !== 'production') {
   migrate().then(() => {
     app.listen(PORT, () => {
@@ -124,8 +126,8 @@ if (process.env.NODE_ENV !== 'production') {
     console.error('❌ Failed to run migrations:', err)
   })
 } else {
-  // প্রোডাকশনে (Vercel-এ) ব্যাকগ্রাউন্ডে মাইগ্রেশন রান হবে, সার্ভার ব্লক করবে না
   migrate().catch((err) => console.error('❌ Async Migration Failed:', err))
 }
 
-module.exports = app
+// 🌟 Vercel Serverless-এর জন্য এক্সপোর্ট সিনট্যাক্সটি এভাবে দিন:
+module.exports = app;
