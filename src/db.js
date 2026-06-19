@@ -147,24 +147,13 @@
 
 // module.exports = { pool, migrate }
 
-
 const { Pool } = require('pg')
 
 const isProduction = process.env.NODE_ENV === 'production'
 
-// 🌟 প্রোডাকশনে সরাসরি Neon-এর ফুল কানেকশন স্ট্রিং ব্যবহার করবে
-// লোকালে আপনার দেওয়া ভ্যারিয়েবল বা ডিফল্ট লোকালহোস্টে চলবে
 const pool = new Pool({
-  connectionString: isProduction 
-    ? `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?sslmode=require`
-    : undefined,
-    
-  // লোকাল ডেভেলপমেন্টের ব্যাকআপ কনফিগারেশন
-  host:     isProduction ? undefined : (process.env.DB_HOST || 'localhost'),
-  port:     isProduction ? undefined : (process.env.DB_PORT || 5432),
-  database: isProduction ? undefined : (process.env.DB_NAME || 'taskflow'),
-  user:     isProduction ? undefined : (process.env.DB_USER || 'postgres'),
-  password: isProduction ? undefined : (process.env.DB_PASSWORD || ''),
+  // 🌟 Vercel-এ DATABASE_URL থাকলে সেটা সরাসরি নেবে, তা না হলে লোকাল হোস্টের কনফিগারেশনে চলবে
+  connectionString: process.env.DATABASE_URL || `postgresql://postgres:admine@localhost:5432/taskapp`,
   ssl: isProduction ? { rejectUnauthorized: false } : false,
 })
 
@@ -175,7 +164,7 @@ pool.connect((err, client, release) => {
     return;
   }
   release()
-  console.log('✅ Connected to PostgreSQL')
+  console.log('✅ Connected to PostgreSQL Successfully via Connection String')
 })
 
 // Run this once on startup to create all tables
