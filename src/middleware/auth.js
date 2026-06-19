@@ -1,8 +1,5 @@
 const jwt = require('jsonwebtoken')
 
-// This middleware runs on every protected route.
-// It checks the Authorization header, verifies the JWT token,
-// and puts the user's id and role into req.user
 function authRequired(req, res, next) {
   const authHeader = req.headers['authorization']
 
@@ -32,7 +29,6 @@ function authRequired(req, res, next) {
 }
 
 // This middleware checks that the logged-in user is an admin.
-// Must be used AFTER authRequired.
 function adminRequired(req, res, next) {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ error: 'Admin access required' })

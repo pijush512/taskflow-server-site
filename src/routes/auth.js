@@ -6,7 +6,7 @@ const { pool } = require('../db')
 
 const router = express.Router()
 
-// ─── Helper: generate a JWT token valid for 7 days ───────────────
+//Helper: generate a JWT token valid for 7 days
 function generateToken(userId, role) {
   return jwt.sign(
     { user_id: userId, role },
@@ -15,7 +15,7 @@ function generateToken(userId, role) {
   )
 }
 
-// ─── Helper: send validation errors as a response ────────────────
+// Helper: send validation errors as a response 
 function checkValidation(req, res) {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -24,7 +24,6 @@ function checkValidation(req, res) {
   return null
 }
 
-// ─── POST /auth/signup ────────────────────────────────────────────
 // Creates a new user account with a hashed password
 router.post(
   '/signup',
@@ -42,14 +41,12 @@ router.post(
       .isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   ],
   async (req, res) => {
-    // Check validation errors
     const validationError = checkValidation(req, res)
     if (validationError) return
 
     const { name, email, password } = req.body
 
     try {
-      // Check if email is already taken
       const existing = await pool.query(
         'SELECT id FROM users WHERE email = $1',
         [email]
@@ -57,8 +54,7 @@ router.post(
       if (existing.rows.length > 0) {
         return res.status(409).json({ error: 'An account with this email already exists' })
       }
-
-      // Hash the password — cost 12 is secure without being too slow
+      // hashedPassword
       const hashedPassword = await bcrypt.hash(password, 12)
 
       // Insert new user
@@ -84,7 +80,6 @@ router.post(
   }
 )
 
-// ─── POST /auth/login ─────────────────────────────────────────────
 // Verifies credentials and returns a JWT token
 router.post(
   '/login',
@@ -99,7 +94,6 @@ router.post(
     const { email, password } = req.body
 
     try {
-      // Find user by email
       const result = await pool.query(
         'SELECT id, name, email, password, role, created_at FROM users WHERE email = $1',
         [email]

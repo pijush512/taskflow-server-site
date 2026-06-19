@@ -15,7 +15,7 @@ afterAll(async () => {
   await pool.end()
 })
 
-// ─── Test 1: Signup creates a new account and returns a token ─────
+// Test 1: Signup creates a new account and returns a token 
 describe('POST /auth/signup', () => {
   test('creates account and returns token', async () => {
     const res = await request(app)
@@ -52,7 +52,7 @@ describe('POST /auth/signup', () => {
   })
 })
 
-// ─── Test 2: Login returns token for correct credentials ──────────
+//Test 2: Login returns token for correct credentials
 describe('POST /auth/login', () => {
   beforeEach(async () => {
     const hashed = await bcrypt.hash('correctpassword', 12)
@@ -88,7 +88,7 @@ describe('POST /auth/login', () => {
   })
 })
 
-// ─── Test 3: Task CRUD requires auth and enforces ownership ───────
+// Test 3: Task CRUD requires auth and enforces ownership 
 describe('Task routes', () => {
   let token
   let otherToken

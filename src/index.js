@@ -12,9 +12,8 @@ const { authRequired, adminRequired } = require('./middleware/auth')
 const app  = express()
 const PORT = process.env.PORT || 8080
 
-// ─── Middleware ───────────────────────────────────────────────────
+// Middleware
 
-// CORS: প্রোডাকশনে আপনার Vercel ফ্রন্টএন্ড ইউআরএল অথবা '*' এলাউ করুন
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*', 
   credentials: true,
@@ -22,9 +21,8 @@ app.use(cors({
 
 app.use(express.json())
 
-// ─── Routes ──────────────────────────────────────────────────────
+//Routes
 
-// 🌟 ১. রুট রাউট যোগ করা হলো (যাতে সরাসরি লিংকে ঢুকলে ৪MD না আসে)
 app.get('/', (req, res) => {
   res.send("🚀 TaskFlow API is running successfully on Vercel!")
 })
@@ -46,10 +44,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong on the server' })
 })
 
-// ─── Start ───────────────────────────────────────────────────────
 
-// 🌟 ২. Vercel Serverless-এর জন্য মাইগ্রেশন হ্যান্ডলিং ফিক্স
-// ─── Start ───────────────────────────────────────────────────────
 
 if (process.env.NODE_ENV !== 'production') {
   migrate().then(() => {
@@ -63,5 +58,4 @@ if (process.env.NODE_ENV !== 'production') {
   migrate().catch((err) => console.error('❌ Async Migration Failed:', err))
 }
 
-// 🌟 Vercel Serverless-এর জন্য এক্সপোর্ট সিনট্যাক্সটি এভাবে দিন:
 module.exports = app;

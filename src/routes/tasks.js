@@ -4,7 +4,7 @@ const { pool } = require('../db')
 
 const router = express.Router()
 
-// ─── Helper: log a change to the activity_logs table ─────────────
+//log a change to the activity_logs table
 async function logActivity(taskId, userId, action, detail) {
   try {
     await pool.query(
@@ -17,7 +17,6 @@ async function logActivity(taskId, userId, action, detail) {
   }
 }
 
-// ─── POST /tasks ──────────────────────────────────────────────────
 // Create a new task
 router.post(
   '/',
@@ -64,7 +63,6 @@ router.post(
   }
 )
 
-// ─── GET /tasks ───────────────────────────────────────────────────
 // List tasks with search, filter, sort, and pagination
 // Query params: status, search, sort_by, order, page, limit
 router.get('/', async (req, res) => {
@@ -143,7 +141,6 @@ router.get('/', async (req, res) => {
   }
 })
 
-// ─── GET /tasks/:id ───────────────────────────────────────────────
 // Get a single task (only if it belongs to the logged-in user)
 router.get('/:id', async (req, res) => {
   const taskId = parseInt(req.params.id)
@@ -170,7 +167,6 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// ─── PATCH /tasks/:id ─────────────────────────────────────────────
 // Update a task — only send the fields you want to change
 router.patch(
   '/:id',
@@ -259,7 +255,7 @@ router.patch(
   }
 )
 
-// ─── DELETE /tasks/:id ────────────────────────────────────────────
+//DELETE /tasks/:id
 router.delete('/:id', async (req, res) => {
   const taskId = parseInt(req.params.id)
   const userId = req.user.id
@@ -287,7 +283,6 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
-// ─── GET /tasks/:id/activity ──────────────────────────────────────
 // Get the change history for a task
 router.get('/:id/activity', async (req, res) => {
   const taskId = parseInt(req.params.id)
